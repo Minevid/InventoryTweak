@@ -1,0 +1,11 @@
+main: com.drcnetwork.inventorytweak.InventoryTweak
+version: 1.0
+author: Reynout123
+name: Inventory Tweak
+commands:
+  gm1:
+    description: Opens inventory
+    usage: /gm1
+  gmc:
+    description: Opens inventory
+    usage: /gmc
