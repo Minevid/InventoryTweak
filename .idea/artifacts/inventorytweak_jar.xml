@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="inventorytweak:jar">
-    <output-path>$PROJECT_DIR$/../TestServer3/plugins</output-path>
-    <root id="archive" name="inventorytweak.jar">
-      <element id="module-output" name="inventorytweak" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../BuildTools/1.11.2 (hopelijk)/Spigot/Spigot-API/target/spigot-api-1.11.2-R0.1-SNAPSHOT.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>
