@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 public class InventoryTweak extends JavaPlugin {
 
     private List<String> whitelistItems = new ArrayList<>();
-    private List<String> itemsLeft = this.getWhitelistItems();
     private List<String> blackListItems = new ArrayList<>();
+    private List<String> itemsLeft = new ArrayList<>();
     private String permission;
     private int width;
     private int height;
@@ -69,6 +69,7 @@ public class InventoryTweak extends JavaPlugin {
         this.width = getConfig().getInt("width");
         this.height = getConfig().getInt("height");
         this.title = getConfig().getString("InvTitle");
+
         createInventories();
     }
 
@@ -102,21 +103,31 @@ public class InventoryTweak extends JavaPlugin {
         return title;
     }
 
-    public void createInventories()
-    {
-        for(int i = 1; i <= (this.whitelistItems.size()/40)+1;i++)
-        {
-            inventories.add(Bukkit.createInventory(null, 6*9, this.getTitle()+" #"+i));
+    public void createInventories() {
+        for (int i = 1; i <= (this.whitelistItems.size() / 40) + 1; i++) {
+            inventories.add(Bukkit.createInventory(null, 6 * 9, this.getTitle() + " #" + i));
         }
     }
 
-    public List<Inventory> getInventories()
-    {
+    public List<Inventory> getInventories() {
         return this.inventories;
+    }
+
+    public void setItemsLeft()
+    {
+        this.itemsLeft = this.whitelistItems;
     }
 
     public List<String> getItemsLeft()
     {
         return this.itemsLeft;
     }
+
+    public void removeItems(String item)
+    {
+
+        this.itemsLeft.remove(item);
+
+    }
+
 }

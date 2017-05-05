@@ -44,26 +44,48 @@ public class InventoryCommand implements CommandExecutor {
             return true;
         }
 
-        List<String> itemsLeft = this.plugin.getWhitelistItems();
-        int counterAmount = 1;
+        System.out.println(this.plugin.getWhitelistItems().size());
 
-            for(int i = 0; i < 40; i++)
-            {
+
+        if (this.plugin.getWhitelistItems().size() > 40) {
+            System.out.println("More then 40 items");
+
+            for (int i = 0; i < 40; i++) {
                 Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(i));
-                ItemStack newItemStack = new ItemStack(material,1, material.getMaxDurability());
+                ItemStack newItemStack = new ItemStack(material, 1, material.getMaxDurability());
                 this.plugin.getInventories().get(0).setItem(i, newItemStack);
-                counterAmount++;
-            }
 
-            for(int i = 0; i < counterAmount-1; i++)
-            {
-                itemsLeft.remove(this.plugin.getWhitelistItems().get(i));
+            }
+            this.plugin.setItemsLeft();
+            System.out.println(this.plugin.getItemsLeft().size());
+            for (int i = 0; i < 40; i++) {
+                this.plugin.removeItems(this.plugin.getItemsLeft().get(i));
                 System.out.println(i + " " + this.plugin.getWhitelistItems().get(i));
             }
 
-            this.plugin.getInventories().get(0).setItem(53,new ItemStack(Material.BARRIER, 1));
+            this.plugin.getInventories().get(0).setItem(53, new ItemStack(Material.BARRIER, 1));
             player.openInventory(this.plugin.getInventories().get(0));
             return true;
+
+        }else{
+            System.out.println("Less then 40 items");
+            for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
+                Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(i));
+                ItemStack newItemStack = new ItemStack(material, 1, material.getMaxDurability());
+                this.plugin.getInventories().get(0).setItem(i, newItemStack);
+            }
+
+            for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
+                this.plugin.removeItems(this.plugin.getItemsLeft().get(i));
+            }
+
+            player.openInventory(this.plugin.getInventories().get(0));
+            return true;
+
+
+
+
+        }
 
     }
 }

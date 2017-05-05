@@ -64,7 +64,7 @@ public class InventoryClick implements Listener {
 
             }
 
-
+            System.out.println(String.valueOf(this.plugin.getItemsLeft().size()));
             if (event.getCurrentItem().getType().equals(Material.BARRIER)) {
 
                 event.getWhoClicked().openInventory(this.plugin.getInventories().get(Integer.parseInt(event.getClickedInventory().getName().substring(event.getClickedInventory().getTitle().length() - 1))));
@@ -77,46 +77,52 @@ public class InventoryClick implements Listener {
     }
 
     private void fillInventory(Inventory openInventory) {
-        List<String> left = this.plugin.getItemsLeft();
-        if (left.isEmpty()) {
+        System.out.println(String.valueOf(this.plugin.getItemsLeft().size()));
+        if (this.plugin.getItemsLeft().isEmpty()) {
             this.plugin.getLogger().warning("We can't fill anymore. We are out of items");
             return;
         }
 
+        System.out.println(this.plugin.getItemsLeft().size()/40);
 
-        if ((left.size() / 40) != 0 && left.size() >= 40) {
-            int counterTest = 1;
+        System.out.println("BULLSHIT");
+
+        int invID = Integer.parseInt(openInventory.getTitle().substring(openInventory.getTitle().length() - 1))-1;
+        System.out.println(this.plugin.getWhitelistItems().size()%40);
+
+
+        if (this.plugin.getItemsLeft().size() > 40) {
+            System.out.println("More then 40 items");
             for (int j = 0; j < 40; j++) {
-                System.out.println(counterTest + " Bitch " + (j));
-                Material material = Material.getMaterial(left.get(j));
+                Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(j + 40));
                 ItemStack newItemStack = new ItemStack(material, 1);
                 openInventory.setItem(j, newItemStack);
                 openInventory.setItem(53, new ItemStack(Material.BARRIER, 1));
-                counterTest++;
+
             }
 
             for (int k = 0; k < 40; k++) {
-                Material material = Material.getMaterial(left.get(k));
-                ItemStack newItemStack = new ItemStack(material, 1);
-                left.remove(newItemStack.getType().toString());
+                this.plugin.removeItems(this.plugin.getWhitelistItems().get(k));
             }
 
-        } else {
-            System.out.println("BITCHES");
-            int counterTest2 = 1;
-            if ((this.plugin.getItemsLeft().size() / 40) == 0) {
-                for (int k = 0; k < this.plugin.getItemsLeft().size() % 40; k++) {
-                    Material material = Material.getMaterial(left.get(k));
-                    ItemStack itemStack = new ItemStack(material, 1);
-                    System.out.println(counterTest2 + " Homo " + (k));
-                    openInventory.setItem(k, itemStack);
 
-                    counterTest2++;
-                }
-                for (int l = 0; l < left.size() % 40; l++) {
-                    Material material = Material.getMaterial(left.get(l));
+        } else {
+            System.out.println("Less then 40 items");
+            System.out.println(this.plugin.getItemsLeft().size());
+            System.out.println("BITCHES");
+            if ((this.plugin.getItemsLeft().size() / 40) == 0) {
+                for (int k = 0; k < this.plugin.getItemsLeft().size(); k++) {
+                    Material material = Material.getMaterial(this.plugin.getItemsLeft().get(k));
                     ItemStack itemStack = new ItemStack(material, 1);
-                    left.remove(itemStack.getType().toString());
+                    openInventory.setItem(k, itemStack);
+                }
+
+                for (int i = 0; i < this.plugin.getWhitelistItems().size() % 40; i++) {
+                    System.out.println(i);
+                }
+
+                for (int l = 0; l < this.plugin.getItemsLeft().size(); l++) {
+                    this.plugin.removeItems(this.plugin.getItemsLeft().get(l));
                 }
             }
         }
