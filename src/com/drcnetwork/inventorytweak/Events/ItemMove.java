@@ -1,6 +1,6 @@
 package com.drcnetwork.inventorytweak.Events;
 
-import com.drcnetwork.inventorytweak.InventoryTweak;
+import com.drcnetwork.inventorytweak.ItemsGUI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -12,9 +12,9 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 public class ItemMove implements Listener {
 
     private static boolean moveCancelled;
-    InventoryTweak plugin;
+    ItemsGUI plugin;
 
-    public ItemMove(InventoryTweak plugin) {
+    public ItemMove(ItemsGUI plugin) {
         this.plugin = plugin;
     }
 

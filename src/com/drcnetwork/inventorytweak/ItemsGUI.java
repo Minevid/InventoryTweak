@@ -22,14 +22,15 @@ import java.util.logging.Logger;
 /**
  * Created by Reynout on 4/05/2017.
  */
-public class InventoryTweak extends JavaPlugin {
+public class ItemsGUI extends JavaPlugin {
 
     private List<String> whitelistItems = new ArrayList<>();
     private List<String> blackListItems = new ArrayList<>();
     private List<String> itemsLeft = new ArrayList<>();
+
+    private String nextButtonItem;
+    private String previousButtonItem;
     private String permission;
-    private int width;
-    private int height;
     private String title;
     private List<Inventory> inventories = new ArrayList<>();
 
@@ -66,9 +67,9 @@ public class InventoryTweak extends JavaPlugin {
         this.whitelistItems = getConfig().getStringList("Whitelistitems");
         this.blackListItems = getConfig().getStringList("Blacklistitems");
         this.permission = getConfig().getString("Permission");
-        this.width = getConfig().getInt("width");
-        this.height = getConfig().getInt("height");
         this.title = getConfig().getString("InvTitle");
+        this.nextButtonItem = getConfig().getString("nextPageItem");
+        this.previousButtonItem = getConfig().getString("previousPageItem");
 
         createInventories();
     }
@@ -113,21 +114,31 @@ public class InventoryTweak extends JavaPlugin {
         return this.inventories;
     }
 
-    public void setItemsLeft()
-    {
-        this.itemsLeft = this.whitelistItems;
-    }
-
-    public List<String> getItemsLeft()
-    {
+    /* public void setItemsLeft()
+     {
+         this.itemsLeft = this.whitelistItems;
+     }
+ */
+    public List<String> getItemsLeft() {
         return this.itemsLeft;
     }
 
-    public void removeItems(String item)
-    {
+    public void addItem(String item) {
+        this.itemsLeft.add(item);
 
-        this.itemsLeft.remove(item);
+    }
 
+
+    public void removeItems(String item) {
+        this.itemsLeft.add(item);
+    }
+
+    public String getNextButtonItem() {
+        return this.nextButtonItem;
+    }
+
+    public String getPreviousButtonItem() {
+        return this.previousButtonItem;
     }
 
 }

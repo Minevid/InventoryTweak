@@ -1,26 +1,23 @@
 package com.drcnetwork.inventorytweak.commands;
 
-import com.drcnetwork.inventorytweak.InventoryTweak;
-import org.bukkit.Bukkit;
+import com.drcnetwork.inventorytweak.ItemsGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Created by Reynout on 4/05/2017.
  */
 public class InventoryCommand implements CommandExecutor {
 
-    InventoryTweak plugin;
+    ItemsGUI plugin;
 
-    public InventoryCommand(InventoryTweak plugin) {
+    public InventoryCommand(ItemsGUI plugin) {
         this.plugin = plugin;
     }
 
@@ -56,18 +53,41 @@ public class InventoryCommand implements CommandExecutor {
                 this.plugin.getInventories().get(0).setItem(i, newItemStack);
 
             }
-            this.plugin.setItemsLeft();
+
+            System.out.println(this.plugin.getWhitelistItems().size() % 40);
+
             System.out.println(this.plugin.getItemsLeft().size());
-            for (int i = 0; i < 40; i++) {
-                this.plugin.removeItems(this.plugin.getItemsLeft().get(i));
-                System.out.println(i + " " + this.plugin.getWhitelistItems().get(i));
+            for(int j = 0; j< this.plugin.getWhitelistItems().size()%40; j++)
+            {
+                this.plugin.addItem(this.plugin.getWhitelistItems().get(j+40));
             }
 
-            this.plugin.getInventories().get(0).setItem(53, new ItemStack(Material.BARRIER, 1));
+
+
+            /**
+             for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
+             this.plugin.removeItems(this.plugin.getWhitelistItems().get(i));
+
+             System.out.println(i + " " + this.plugin.getWhitelistItems().get(i));
+             System.out.println(this.plugin.getItemsLeft().size());
+             System.out.println(this.plugin.getWhitelistItems().size());
+
+             if(i == 100)
+             {
+             return true;
+             }
+             }
+             */
+            ItemStack nextItem = new ItemStack(Material.getMaterial(this.plugin.getNextButtonItem()));
+            ItemMeta nextItemMeta = nextItem.getItemMeta();
+            nextItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&aNEXT"));
+            nextItem.setItemMeta(nextItemMeta);
+            this.plugin.getInventories().get(0).setItem(53, nextItem);
+
             player.openInventory(this.plugin.getInventories().get(0));
             return true;
 
-        }else{
+        } else {
             System.out.println("Less then 40 items");
             for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
                 Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(i));
@@ -81,8 +101,6 @@ public class InventoryCommand implements CommandExecutor {
 
             player.openInventory(this.plugin.getInventories().get(0));
             return true;
-
-
 
 
         }

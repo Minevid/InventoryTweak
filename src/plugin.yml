@@ -1,7 +1,7 @@
-main: com.drcnetwork.inventorytweak.InventoryTweak
-version: 1.0
+main: com.drcnetwork.inventorytweak.ItemsGUI
 author: Reynout123
-name: Inventory Tweak
+version: 1.0
+name: ItemsGUI
 commands:
   gm1:
     description: Opens inventory

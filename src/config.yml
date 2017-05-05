@@ -8,7 +8,9 @@ Blacklistitems: []
 
 Permission: "it.open"
 
-height: 6
-width: 9
 InvTitle: TestInventory
+
+previousPageItem: BARRIER
+
+nextPageItem: BARRIER
 
