@@ -70,7 +70,6 @@ public class ItemsGUI extends JavaPlugin {
         this.title = getConfig().getString("InvTitle");
         this.nextButtonItem = getConfig().getString("nextPageItem");
         this.previousButtonItem = getConfig().getString("previousPageItem");
-
         createInventories();
     }
 
@@ -105,8 +104,23 @@ public class ItemsGUI extends JavaPlugin {
     }
 
     public void createInventories() {
-        for (int i = 1; i <= (this.whitelistItems.size() / 40) + 1; i++) {
-            inventories.add(Bukkit.createInventory(null, 6 * 9, this.getTitle() + " #" + i));
+
+
+        if (this.whitelistItems.size() > 40) {
+            int size;
+            if (this.getWhitelistItems().size() % 40 != 0) {
+                size = (this.whitelistItems.size() / 40) + 1;
+                for (int i = 0; i < size; i++) {
+                    inventories.add(Bukkit.createInventory(null, 6 * 9, this.getTitle() + " #" + (i + 1)));
+                }
+            } else {
+                size = (this.whitelistItems.size() / 40);
+                for (int i = 0; i < size; i++) {
+                    inventories.add(Bukkit.createInventory(null, 6 * 9, this.getTitle() + " #" + (i + 1)));
+                }
+            }
+        } else {
+            inventories.add(Bukkit.createInventory(null, 6 * 9, this.getTitle() + " #" + 1));
         }
     }
 
@@ -129,9 +143,6 @@ public class ItemsGUI extends JavaPlugin {
     }
 
 
-    public void removeItems(String item) {
-        this.itemsLeft.add(item);
-    }
 
     public String getNextButtonItem() {
         return this.nextButtonItem;
@@ -140,5 +151,6 @@ public class ItemsGUI extends JavaPlugin {
     public String getPreviousButtonItem() {
         return this.previousButtonItem;
     }
+
 
 }

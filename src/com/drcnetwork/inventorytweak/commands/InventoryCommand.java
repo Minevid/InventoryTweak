@@ -7,8 +7,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Reynout on 4/05/2017.
@@ -16,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class InventoryCommand implements CommandExecutor {
 
     ItemsGUI plugin;
+    private boolean firstTime = true;
 
     public InventoryCommand(ItemsGUI plugin) {
         this.plugin = plugin;
@@ -41,69 +46,61 @@ public class InventoryCommand implements CommandExecutor {
             return true;
         }
 
-        System.out.println(this.plugin.getWhitelistItems().size());
-
-
         if (this.plugin.getWhitelistItems().size() > 40) {
-            System.out.println("More then 40 items");
-
-            for (int i = 0; i < 40; i++) {
-                Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(i));
-                ItemStack newItemStack = new ItemStack(material, 1, material.getMaxDurability());
-                this.plugin.getInventories().get(0).setItem(i, newItemStack);
-
-            }
-
-            System.out.println(this.plugin.getWhitelistItems().size() % 40);
-
-            System.out.println(this.plugin.getItemsLeft().size());
-            for(int j = 0; j< this.plugin.getWhitelistItems().size()%40; j++)
-            {
-                this.plugin.addItem(this.plugin.getWhitelistItems().get(j+40));
-            }
-
-
-
-            /**
-             for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
-             this.plugin.removeItems(this.plugin.getWhitelistItems().get(i));
-
-             System.out.println(i + " " + this.plugin.getWhitelistItems().get(i));
-             System.out.println(this.plugin.getItemsLeft().size());
-             System.out.println(this.plugin.getWhitelistItems().size());
-
-             if(i == 100)
-             {
-             return true;
-             }
-             }
-             */
             ItemStack nextItem = new ItemStack(Material.getMaterial(this.plugin.getNextButtonItem()));
             ItemMeta nextItemMeta = nextItem.getItemMeta();
             nextItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&aNEXT"));
             nextItem.setItemMeta(nextItemMeta);
             this.plugin.getInventories().get(0).setItem(53, nextItem);
-
-            player.openInventory(this.plugin.getInventories().get(0));
-            return true;
-
-        } else {
-            System.out.println("Less then 40 items");
-            for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
-                Material material = Material.getMaterial(this.plugin.getWhitelistItems().get(i));
-                ItemStack newItemStack = new ItemStack(material, 1, material.getMaxDurability());
-                this.plugin.getInventories().get(0).setItem(i, newItemStack);
-            }
-
-            for (int i = 0; i < this.plugin.getWhitelistItems().size(); i++) {
-                this.plugin.removeItems(this.plugin.getItemsLeft().get(i));
-            }
-
-            player.openInventory(this.plugin.getInventories().get(0));
-            return true;
-
-
         }
 
+        if (firstTime) {
+            fillInventory(this.plugin.getInventories());
+            firstTime = false;
+        }
+        player.openInventory(this.plugin.getInventories().get(0));
+        return true;
+    }
+
+    public void fillInventory(List<Inventory> inventories) {
+        List<String> whitelistItems = new ArrayList<>();
+        for (String s : this.plugin.getWhitelistItems()) {
+            whitelistItems.add(s);
+        }
+
+        System.out.println(whitelistItems.size());
+        List<String> itemsLeft = this.plugin.getWhitelistItems();
+
+        if (whitelistItems.size() <= 40) {
+            for (int i = 0; i < whitelistItems.size(); i++) {
+                Material material = Material.getMaterial(whitelistItems.get(i));
+                ItemStack item = new ItemStack(material, 1);
+                item.setDurability(material.getMaxDurability());
+                inventories.get(0).setItem(i, item);
+            }
+        } else {
+            for (int j = 0; j < (inventories.size() - 1); j++) {
+                for (int k = 0; k < 40; k++) {
+                    Material material = Material.getMaterial(whitelistItems.get(k));
+                    ItemStack itemStack = new ItemStack(material, 1);
+                    itemStack.setDurability(material.getMaxDurability());
+                    inventories.get(j).setItem(k, itemStack);
+                    itemsLeft.remove(itemStack.getType().toString());
+                }
+            }
+            if (!itemsLeft.isEmpty()) {
+                int numberLeft = whitelistItems.size() % 40;
+                System.out.println(numberLeft);
+                Inventory latestInventory = inventories.get(inventories.size() - 1);
+                System.out.println(itemsLeft.size());
+                for (int l = 0; l < whitelistItems.size() % 40; l++) {
+                    Material material = Material.getMaterial(whitelistItems.get(l));
+                    ItemStack itemStack = new ItemStack(material, 1);
+                    itemStack.setDurability(material.getMaxDurability());
+                    latestInventory.setItem(l, itemStack);
+                }
+                itemsLeft.clear();
+            }
+        }
     }
 }
